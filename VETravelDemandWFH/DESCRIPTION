@@ -1,0 +1,37 @@
+Package: VETravelDemandWFH
+Type: Package
+Title: Simulate Multi-Modal Travel Demand for Households with Adjustments for Working from Home
+Version: 3.1.1
+Date: 2024-01-24
+Authors@R: c(person("Liming", "Wang", role=c("aut", "cre"), email="lmwang@pdx.edu"), person("Colin", "Smith", role=c("ctb"), email="colin.smith@rsginc.com"))
+Maintainer: Colin Smith <csmith@rsginc.com>
+Copyright: ODOT
+URL: https://github.com/cities-lab/VETravelDemandWFH
+Description: This package contains a module for the VisionEval framework that simulates 
+     multi-modal travel demand for individual households. The core MM package has been updated to reflect the teleworking behaviors that are called in this package. VE state requires additional commute behavior as an input to the EXT data. VERSPM uses the modeled commute distance.
+License: file LICENSE
+LazyData: TRUE
+Encoding: UTF-8
+Depends: R (>= 3.6.0)
+Imports:
+    dplyr,
+    purrr,
+    MASS,
+    splines,
+    tidyr,
+    pscl,
+    rmarkdown,
+    sn,
+    data.table,
+    visioneval,
+    VE2001NHTS
+Suggests:
+    knitr,
+    NHTS2009,
+    SLD
+VignetteBuilder: knitr
+Roxygen: list(load="source")
+RoxygenNote: 7.2.3
+Remotes:
+    cities-lab/NHTS2009,
+    cities-lab/SLD
