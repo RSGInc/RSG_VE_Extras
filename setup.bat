@@ -13,12 +13,14 @@ ECHO R_LIBS_USER = "%VE_LIB%" > .Renviron
 IF NOT DEFINED WHICH_R GOTO End 
 
 TITLE VE PACKAGES INSTALL
-SET "App[1]=VESimHouseholdsMetro"
-SET "App[2]=VEPowertrainsAndFuelsAP2022"
-SET "App[3]=VEPowertrainsAndFuelsSTS"
-SET "App[4]=VETravelDemandWFH"
-SET "App[5]=VERSPMMetroModels"
-SET "App[6]=All Modules"
+SET "App[1]=VEHouseholdVehicles"
+SET "App[2]=VEHouseholdVehiclesDL"
+SET "App[3]=VELandUseDL"
+SET "App[4]=VESimLandUseDL"
+SET "App[5]=VETravelDemandMM"
+SET "App[6]=VETravelDemandWFH"
+SET "App[7]=VETravelPerformanceDL"
+SET "App[8]=All Modules"
 
 :: Display Menu
 SET "Message="
@@ -78,13 +80,15 @@ CALL SET "App=%%App[%1]%%"
 :: Run Installations
 :: Specify all of the installations for each app.
 :: Step 2. Match on the application names and perform the installation for each
-IF "%App%" EQU "VESimHouseholdsMetro" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
-IF "%App%" EQU "VEPowertrainsAndFuelsAP2022" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
-IF "%App%" EQU "VEPowertrainsAndFuelsSTS" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
+IF "%App%" EQU "VEHouseholdVehicles" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
+IF "%App%" EQU "VEHouseholdVehiclesDL" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
+IF "%App%" EQU "VELandUseDL" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
+IF "%App%" EQU "VESimLandUseDL" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
+IF "%App%" EQU "VETravelDemandMM" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
 IF "%App%" EQU "VETravelDemandWFH" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
-IF "%App%" EQU "VERSPMMetroModels" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
+IF "%App%" EQU "VETravelPerformanceDL" ECHO Installing %App% && CALL "%WHICH_R%\bin\R.exe" CMD INSTALL -l "%VE_LIB%" "%~dp0\%App%"
 IF "%App%" EQU "All Modules" (
-CALL :Process 1 2 3 4 5 6
+CALL :Process 1 2 3 4 5 6 7 8
 )
 
 :: Prevent the command from being processed twice if listed twice.

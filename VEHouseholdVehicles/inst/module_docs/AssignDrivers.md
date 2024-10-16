@@ -1,6 +1,6 @@
 
 # AssignDrivers Module
-### September 6, 2018
+### July 8, 2020
 
 This module assigns drivers by age group to each household as a function of the numbers of persons and workers by age group, the household income, land use characteristics, and public transit availability. Users may specify the relative driver licensing rate relative to the model estimation data year in order to account for observed or projected changes in licensing rates.
 
@@ -16,33 +16,33 @@ glm(formula = makeFormula(StartTerms_), family = binomial, data = EstData_df[Tra
 
 Deviance Residuals: 
     Min       1Q   Median       3Q      Max  
--3.3008   0.1298   0.2071   0.3991   3.0757  
+-3.3066   0.1303   0.2099   0.3990   2.7040  
 
 Coefficients:
                   Estimate Std. Error z value Pr(>|z|)    
-(Intercept)     -1.802e+01  1.056e+02  -0.171    0.865    
-Age15to19        1.719e+01  1.056e+02   0.163    0.871    
-Age20to29        1.957e+01  1.056e+02   0.185    0.853    
-Age30to54        1.987e+01  1.056e+02   0.188    0.851    
-Age55to64        1.974e+01  1.056e+02   0.187    0.852    
-Age65Plus        1.916e+01  1.056e+02   0.181    0.856    
-Worker           1.308e+00  5.121e-02  25.540   <2e-16 ***
-HhSize          -2.698e-01  1.663e-02 -16.226   <2e-16 ***
-Income           4.454e-05  1.988e-06  22.401   <2e-16 ***
-IncomeSq        -1.879e-10  1.186e-11 -15.840   <2e-16 ***
-IsSF             4.541e-01  5.122e-02   8.866   <2e-16 ***
-PopDensity      -4.119e-05  3.169e-06 -12.999   <2e-16 ***
-IsUrbanMixNbrhd -6.302e-01  5.955e-02 -10.582   <2e-16 ***
-TranRevMiPC     -8.225e-03  7.520e-04 -10.937   <2e-16 ***
+(Intercept)     -1.808e+01  1.057e+02  -0.171    0.864    
+Age15to19        1.716e+01  1.057e+02   0.162    0.871    
+Age20to29        1.954e+01  1.057e+02   0.185    0.853    
+Age30to54        1.986e+01  1.057e+02   0.188    0.851    
+Age55to64        1.977e+01  1.057e+02   0.187    0.852    
+Age65Plus        1.918e+01  1.057e+02   0.182    0.856    
+Worker           1.296e+00  5.111e-02  25.358   <2e-16 ***
+HhSize          -2.582e-01  1.649e-02 -15.655   <2e-16 ***
+Income           4.422e-05  1.982e-06  22.306   <2e-16 ***
+IncomeSq        -1.817e-10  1.188e-11 -15.299   <2e-16 ***
+IsSF             4.411e-01  5.086e-02   8.672   <2e-16 ***
+PopDensity      -3.926e-05  3.156e-06 -12.437   <2e-16 ***
+IsUrbanMixNbrhd -6.064e-01  5.935e-02 -10.217   <2e-16 ***
+TranRevMiPC     -8.235e-03  7.483e-04 -11.004   <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 26592  on 31369  degrees of freedom
-Residual deviance: 14878  on 31356  degrees of freedom
-  (10192 observations deleted due to missingness)
-AIC: 14906
+    Null deviance: 26708  on 31345  degrees of freedom
+Residual deviance: 14983  on 31332  degrees of freedom
+  (10216 observations deleted due to missingness)
+AIC: 15011
 
 Number of Fisher Scoring iterations: 16
 
@@ -58,31 +58,31 @@ glm(formula = makeFormula(StartTerms_), family = binomial, data = EstData_df[Tra
 
 Deviance Residuals: 
     Min       1Q   Median       3Q      Max  
--3.2951   0.1226   0.1779   0.3478   2.6044  
+-3.3179   0.1208   0.1763   0.3441   2.1624  
 
 Coefficients:
               Estimate Std. Error z value Pr(>|z|)    
-(Intercept) -1.946e+01  1.139e+02  -0.171    0.864    
-Age15to19    1.857e+01  1.139e+02   0.163    0.871    
-Age20to29    2.086e+01  1.139e+02   0.183    0.855    
-Age30to54    2.102e+01  1.139e+02   0.184    0.854    
-Age55to64    2.104e+01  1.139e+02   0.185    0.853    
-Age65Plus    2.036e+01  1.139e+02   0.179    0.858    
-Worker       1.587e+00  4.589e-02  34.575   <2e-16 ***
-HhSize      -2.367e-01  1.467e-02 -16.138   <2e-16 ***
-Income       4.540e-05  1.799e-06  25.239   <2e-16 ***
-IncomeSq    -2.054e-10  1.134e-11 -18.113   <2e-16 ***
-IsSF         3.993e-01  4.317e-02   9.248   <2e-16 ***
-PopDensity  -6.089e-05  3.716e-06 -16.388   <2e-16 ***
+(Intercept) -1.945e+01  1.142e+02  -0.170    0.865    
+Age15to19    1.853e+01  1.142e+02   0.162    0.871    
+Age20to29    2.083e+01  1.142e+02   0.182    0.855    
+Age30to54    2.102e+01  1.142e+02   0.184    0.854    
+Age55to64    2.113e+01  1.142e+02   0.185    0.853    
+Age65Plus    2.037e+01  1.142e+02   0.178    0.858    
+Worker       1.617e+00  4.607e-02  35.100   <2e-16 ***
+HhSize      -2.297e-01  1.470e-02 -15.626   <2e-16 ***
+Income       4.393e-05  1.809e-06  24.280   <2e-16 ***
+IncomeSq    -1.978e-10  1.141e-11 -17.344   <2e-16 ***
+IsSF         4.066e-01  4.342e-02   9.365   <2e-16 ***
+PopDensity  -6.232e-05  3.699e-06 -16.846   <2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 43576  on 57878  degrees of freedom
-Residual deviance: 21901  on 57867  degrees of freedom
-  (16467 observations deleted due to missingness)
-AIC: 21925
+    Null deviance: 43422  on 57681  degrees of freedom
+Residual deviance: 21680  on 57670  degrees of freedom
+  (16664 observations deleted due to missingness)
+AIC: 21704
 
 Number of Fisher Scoring iterations: 17
 
@@ -172,17 +172,17 @@ ISELEMENTOF - Categorical values that are permitted. Values in the datastore are
 |LocType          |Household |Year  |character |category   |NA           |Urban, Town, Rural |
 
 ## Datasets Produced by the Module
-The following table documents each dataset that is retrieved from the datastore and used by the module. Each row in the table describes a dataset. All the datasets must be present in the datastore. One or more of these datasets may be entered into the datastore from the user input files. The table names and their meanings are as follows:
+The following table documents each dataset that is placed in the datastore by the module. Each row in the table describes a dataset. All the datasets must be present in the datastore. One or more of these datasets may be entered into the datastore from the user input files. The table names and their meanings are as follows:
 
 NAME - The dataset name.
 
-TABLE - The table in the datastore that the data is retrieved from.
+TABLE - The table in the datastore that the data is placed in.
 
 GROUP - The group in the datastore where the table is located. Note that the datastore has a group named 'Global' and groups for every model run year. For example, if the model run years are 2010 and 2050, then the datastore will have a group named '2010' and a group named '2050'. If the value for 'GROUP' is 'Year', then the dataset will exist in each model run year. If the value for 'GROUP' is 'BaseYear' then the dataset will only exist in the base year group (e.g. '2010'). If the value for 'GROUP' is 'Global' then the dataset will only exist in the 'Global' group.
 
 TYPE - The data type. The framework uses the type to check units and inputs. Refer to the model system design and users guide for information on allowed types.
 
-UNITS - The units that input values need to represent. Some data types have defined units that are represented as abbreviations or combinations of abbreviations. For example 'MI/HR' means miles per hour. Many of these abbreviations are self evident, but the VisionEval model system design and users guide should be consulted.
+UNITS - The native units that are created in the datastore. Some data types have defined units that are represented as abbreviations or combinations of abbreviations. For example 'MI/HR' means miles per hour. Many of these abbreviations are self evident, but the VisionEval model system design and users guide should be consulted.
 
 PROHIBIT - Values that are prohibited. Values in the datastore do not meet any of the listed conditions.
 
