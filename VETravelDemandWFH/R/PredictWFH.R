@@ -268,7 +268,7 @@ PredictWFHSpecifications <- list(
       TABLE = "Bzone",
       GROUP = "Year",
       TYPE = "compound",
-      UNITS = "PRSN/ACRE",
+      UNITS = "JOB/ACRE",
       NAVALUE = -1,
       PROHIBIT = c("NA", "< 0"),
       ISELEMENTOF = "",
