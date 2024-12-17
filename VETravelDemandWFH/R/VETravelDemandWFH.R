@@ -5,7 +5,7 @@
 #' See the README on
 #' \href{https://github.com/gregorbj/VisionEval/sources/modules/VETravelDemandWFH}{GitHub}
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @name VETravelDemandWFH
 NULL
 
