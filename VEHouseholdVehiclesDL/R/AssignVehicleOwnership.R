@@ -398,6 +398,15 @@ AssignVehicleOwnershipSpecifications <- list(
       ISELEMENTOF = ""
     ),
     item(
+      NAME = "Drv65Plus",
+      TABLE = "Household",
+      GROUP = "Year",
+      TYPE = "people",
+      UNITS = "PRSN",
+      PROHIBIT = c("NA", "< 0"),
+      ISELEMENTOF = ""
+    ),
+    item(
       NAME = "IsUrbanMixNbrhd",
       TABLE = "Household",
       GROUP = "Year",
