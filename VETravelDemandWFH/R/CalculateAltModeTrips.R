@@ -5,7 +5,8 @@
 #<doc>
 #
 ## CalculateAltModeTrips Module
-#### March 2020
+#### Original March 2020
+# Updated by Colin Smith at RSG as part of the Mass DOT Teleworking study and included in WFH package
 #
 #This module predicts:
 # 1- transit PMT for households. It uses the model object in data/TransitPMTModel_df.rda and variables and coefficients therein to predict TransitPMT.
@@ -555,9 +556,10 @@ CalculateAltModeTrips <- function(L) {
   }
   stopifnot("data.frame" %in% class(Bzone_df))
   
+  #this df was divided by 1000 to make it work for the Mass context. The standard default excludes the division by 1000.
   Marea_df <- data.frame(L$Year[["Marea"]])
   if ("TranRevMiPC" %in% colnames(Marea_df)) {
-    Marea_df$TranRevMiPC = Marea_df$TranRevMiPC / 1000
+    Marea_df$TranRevMiPC = Marea_df$TranRevMiPC
   }
   stopifnot("data.frame" %in% class(Marea_df))
   
