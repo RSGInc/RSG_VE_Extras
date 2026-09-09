@@ -1,8 +1,8 @@
 Package: VETravelDemandWFH
 Type: Package
 Title: Simulate Multi-Modal Travel Demand for Households with Adjustments for Working from Home
-Version: 3.1.1
-Date: 2024-01-24
+Version: 3.1.2
+Date: 2026-09-09
 Authors@R: c(person("Liming", "Wang", role=c("aut", "cre"), email="lmwang@pdx.edu"), person("Colin", "Smith", role=c("ctb"), email="colin.smith@rsginc.com"))
 Maintainer: Colin Smith <csmith@rsginc.com>
 Copyright: ODOT

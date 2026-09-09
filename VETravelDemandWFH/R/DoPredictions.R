@@ -21,6 +21,10 @@
 #'   Model_df is used for segmentation
 #' @param combine_preds A logical flag indicating whether to combine predictions
 #'   for multi-step models (default FALSE)
+#' @param merge_preds A logical flag indicating whether to reorder
+#'   all the predictions by id_name (used if SegmentCol creates
+#'   subsets of the database rather than different model regimes; see
+#'   CalculateAltModeTrips versus CalculateHouseholdDvmt)
 #' @return A list containing the components specified in the Set specifications
 #'   for the module along with: LENGTH: A named integer vector having a single
 #'   named element, "Household", which identifies the length (number of rows) of
@@ -35,7 +39,9 @@
 #' @export
 #'
 DoPredictions <- function(Model_df, Dataset_df,
-                           dataset_name, id_name, y_name, SegmentCol_vc=NULL, combine_preds=FALSE) {
+                           dataset_name, id_name, y_name, SegmentCol_vc=NULL, combine_preds=FALSE,
+                          merge_preds=TRUE
+                          ) {
   
   ## change the old nest and unnest function to be compatible with new tidyr
   nest <- nest_legacy
@@ -89,19 +95,73 @@ DoPredictions <- function(Model_df, Dataset_df,
                 y=CombinePreds(y)) %>%
       ungroup()
   }
-
-  if(any(grepl("step", names(Preds_lcdf),ignore.case = TRUE))){
-    Preds_df <- Preds_lcdf %>%
-      mutate(id=map(data, id_name)) %>%
-      unnest(id, y) %>% group_by(Step) %>% slice(match(Dataset_df[[id_name]],id)) %>%
-      ungroup()
-  } else {
-    Preds_df <- Preds_lcdf %>%
-      mutate(id=map(data, id_name)) %>%
-      unnest(id, y) %>% slice(match(Dataset_df[[id_name]],id))
+  
+  Preds_lcdf <- Preds_lcdf %>%
+    mutate(id=map(data, id_name)) %>%
+    unnest(id, y)
+  
+  if ( merge_preds ) {
+    # If multiple modeling steps remain, household IDs repeat across steps.
+    # Therefore align each step independently.
+    if ("step" %in% names(Preds_df)) {
+      Preds_df <- Preds_df %>% group_split(step) %>% map_dfr(
+          ~ alignPredictionRows(.x, Dataset_df[[id_name]]))
+    } else {
+      Preds_df <- alignPredictionRows(Preds_df, Dataset_df[[id_name]])
+    }
   }
-  Preds_df
+  }
+  
+  return( Preds_lcdf )
+}
 
+# Internal function to restore prediction rows to source-dataset order using complete identities.
+# Household identities are opaque and do not have a generally valid numeric or
+# lexical ordering rule.
+alignPredictionRows <- function(Preds_lcdf, DatasetIds_) {
+  DatasetIds_ <- as.character(DatasetIds_)
+  PredictionIds_ <- as.character(Preds_lcdf$id)
+  
+  if (anyNA(DatasetIds_) || any(!nzchar(DatasetIds_))) {
+    writeLog(msg<-"Dataset household identities contain missing or blank values.", Level="error")
+    stop(msg)
+  }
+  if (anyDuplicated(DatasetIds_)) {
+    writeLog(msg<-"Dataset household identities are not one-to-one.", Level="error")
+    stop(msg)
+  }
+  if (anyNA(PredictionIds_) || any(!nzchar(PredictionIds_))) {
+    writeLog(msg<-"Prediction household identities contain missing or blank values.", Level="error")
+    stop(msg)
+  }
+  
+  if (anyDuplicated(PredictionIds_)) {
+    writeLog(msg<-"Prediction household identities are not one-to-one.", Level="error")
+    stop(msg)
+  }
+  
+  MissingIds_ <- DatasetIds_[!DatasetIds_ %in% PredictionIds_]
+  ExtraIds_ <- PredictionIds_[!PredictionIds_ %in% DatasetIds_]
+  if (length(MissingIds_)) {
+    writeLog(msg<-"Predictions are missing ", length(MissingIds_),
+             " complete household identities.", Level="error")
+    stop(msg)
+  }
+  if (length(ExtraIds_)) {
+    writeLog(msg<-"Predictions contain ", length(ExtraIds_),
+             " unexpected complete household identities.", Level="error")
+    stop(msg)
+  }
+  
+  Match_ <- match(DatasetIds_, PredictionIds_)
+  Preds_lcdf <- Preds_lcdf[Match_, , drop = FALSE]
+  if (!identical(as.character(Preds_lcdf$id), DatasetIds_)) {
+    writeLog(msg<-"Exact household-identity alignment failed to restore Dataset order.",
+             Level="error")
+    stop(msg)
+  }
+  
+  Preds_lcdf
 }
 
 #' internal function that handles pass a list column of a data frame to another
