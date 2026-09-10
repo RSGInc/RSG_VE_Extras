@@ -58,6 +58,7 @@
 #Create model estimation dataset
 #-------------------------------
 #Load selected data from VE2001NHTS package
+# Is this too memory-intensive? Can we find a simpler way to put it all together
 Hh_df <- loadPackageDataset("Hh_df","VE2001NHTS")
 FieldsToKeep_ <-
   c("NumVeh", "Income", "Hbppopdn", "Hhsize", "Hometype", "UrbanDev", "FwyLnMiPC",
@@ -613,6 +614,7 @@ AssignVehicleOwnership <- function(L) {
   #Calculate number of households
   NumHh <- length(L$Year$Household[[1]])
 
+  visioneval::writeLog("Setting up HH data frame",Level="info")
   #Set up data frame of household data needed for model
   #----------------------------------------------------
   Hh_df <- data.frame(L$Year$Household)
@@ -624,6 +626,9 @@ AssignVehicleOwnership <- function(L) {
   Hh_df$LogDensity <- log(Density_)
   TranRevMiPC_Bz <- L$Year$Marea$TranRevMiPC[match(L$Year$Bzone$Marea, L$Year$Marea$Marea)]
   Hh_df$TranRevMiPC <- TranRevMiPC_Bz[match(L$Year$Household$Bzone, L$Year$Bzone$Bzone)]
+  gc(full=TRUE) # The garbage collection gives us a fighting chance to not run out of memory in big models
+
+
   Hh_df$CarSvcCandidate <- as.integer(runif(nrow(Hh_df)) < Hh_df$CarSvcPropensity)
   
   TargetShareLvl5 <- as.vector(L$Year$Region$AVLvl5Share)
@@ -638,6 +643,8 @@ AssignVehicleOwnership <- function(L) {
 
   #Make a vehicle probability matrix
   #---------------------------------
+  visioneval::writeLog("Vehicle Probability Matrix",Level="info")
+  # NOTE: This seems to be where memory usage really spikes in big models...
   AutoOwnModels_ls <- loadPackageDataset("AutoOwnModels_ls","VEHouseholdVehicles")
 
   #Identify Urban households
@@ -658,6 +665,7 @@ AssignVehicleOwnership <- function(L) {
       NoVehicleCarSvcCoef*Hh_df[IsUrban,"CarSvcCandidate"]
     NoVehicleProb_[IsUrban] <- invlogit(NoVehicleUtility)
   }
+  gc(full=TRUE) 
   if (any(!IsUrban)) {
     NoVehicleUtility <-
       predict(AutoOwnModels_ls$NonMetro$Zero,
@@ -667,6 +675,7 @@ AssignVehicleOwnership <- function(L) {
       NoVehicleCarSvcCoef*Hh_df[!IsUrban,"CarSvcCandidate"]
     NoVehicleProb_[!IsUrban] <- invlogit(NoVehicleUtility)
   }
+  gc(full=TRUE)
   #Vehicle count probability
   VehicleProb_mx <- array(NA,dim = c(NumHh, 6))
   NumVehAVLvl5Coef <- 1
@@ -686,6 +695,7 @@ AssignVehicleOwnership <- function(L) {
         plogis(VehiclePredict_mx[,i-1],0,1,1)
     }
   }
+  gc(full=TRUE)
   if (any(!IsUrban)) {
     VehiclePredict_mx <-
       predict(AutoOwnModels_ls$NonMetro$Count,
@@ -701,6 +711,7 @@ AssignVehicleOwnership <- function(L) {
         plogis(VehiclePredict_mx[,i-1],0,1,1)
     }
   }
+  gc(full=TRUE)
   
 
   #Combine no-vehicle and vehicle count probabilities
@@ -709,13 +720,16 @@ AssignVehicleOwnership <- function(L) {
     sweep(VehicleProb_mx, 1, (1 - NoVehicleProb_), "*")
   )
   rm(VehicleProb_mx, NoVehicleProb_)
+  gc(full=TRUE) # Try not to run out of memory
 
   #Predict number of vehicles using probabilities
   #----------------------------------------------
   #Predict number of vehicles for each household
+  visioneval::writeLog("Sampling for HH vehicles",Level="info")
   Vehicles_ <- apply(VehicleProb_HhNv, 1, function(x) {
     sample(0:6, 1, prob = x)
   })
+  gc(full=TRUE) # Try not to run out of memory
 
   #Define function to adjust vehicle predictions to match a target number
   #----------------------------------------------------------------------
@@ -754,6 +768,7 @@ AssignVehicleOwnership <- function(L) {
 
   #Adjust number of vehicles if target vehicles/drivers provided
   #-------------------------------------------------------------
+  visioneval::writeLog("Adjust number of vehicles",Level="info")
   if (!all(is.null(L$Year$Azone$AveVehPerDriver))) {
     #Iterate by Azone to adjust vehicle predictions to match Azone target
     for (az in Az) {
@@ -953,6 +968,7 @@ AssignVehicleOwnership <- function(L) {
   #Return the results
   #------------------
   #Initialize output list
+  visioneval::writeLog("Returning vehicle results",Level="info")
   Out_ls <- initDataList()
   Out_ls$Year$Household <-
     list(Vehicles = Vehicles_,
